@@ -1,0 +1,10 @@
+// Maxime Gavronsky
+
+//maximega@bu.edu
+
+// stores the words from two Strings (i.e., documents) in such a way that you can easily 
+// calculate the "cosine" similarity of the two.
+
+public class TermFrequencyTable{
+    
+}

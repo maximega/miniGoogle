@@ -1,0 +1,64 @@
+class MaxHeap {
+        private final int SIZE = 10;       // initial length of array
+        private int next = 0;              // limit of elements in array
+        private int[] A = new int[SIZE];   // implements tree by storing elements in level order
+        
+        // standard resize to avoid overflow
+        private void resize() {
+            int[] B = new int[A.length*2];
+            for(int i = 0; i < A.length; ++i)
+                B[i] = A[i];
+            A = B; 
+        }
+        // methods to move up and down tree as array
+        private int parent(int i) { return (i-1) / 2; }
+        private int lchild(int i) { return 2 * i + 1; }
+        private int rchild(int i) { return 2 * i + 2; }
+        
+        private boolean isLeaf(int i) { return (lchild(i) >= next); }
+        private boolean isRoot(int i) { return i == 0; } 
+        // standard swap, using indices in array
+        private void swap(int i, int j) {
+            int temp = A[i];
+            A[i] = A[j];
+            A[j] = temp;
+        }
+        // basic data structure methods
+        public boolean isEmpty() {
+            return (next == 0);
+        }
+        public int size() {
+            return (next);
+        }
+        // insert an integer into array at next available location
+        //    and fix any violations of heap property on path up to root
+        public void insert(int k) {
+            if(size() == A.length) resize(); 
+            A[next] = k; 
+            
+            int i = next;
+            int p = parent(i); 
+            while(!isRoot(i) && A[i] > A[p]) {
+                swap(i,p);
+                i = p;
+                p = parent(i); 
+            }
+            
+            ++next;
+        }
+        // Remove top (maximum) element, and replace with last element in level
+        //    order; fix any violations of heap property on a path downwards
+        public int getMax() {
+            --next;
+            swap(0,next);                // swap root with last element
+            int i = 0;                   // i is location of new key as it moves down tree
+            // while there is a maximum child and element out of order, swap with max child
+            int mc = maxChild(i); 
+            while(!isLeaf(i) && A[i] < A[mc]) { 
+                swap(i,mc);
+                i = mc; 
+                mc = maxChild(i);
+            }      
+            return A[next];
+        }
+    }
